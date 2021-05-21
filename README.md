@@ -1,5 +1,7 @@
 # Tupledict
 
+[![test](https://github.com/cammacrae/tupledict/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/cammacrae/tupledict/actions/workflows/ci.yml)
+
 ## Classes
 
 * DictList
