@@ -8,7 +8,7 @@
 * TupleDict
 
 
-You can use this by running:
+You can use add this using poetry by running (it's not pushed to PyPI):
 
 ```$ poetry add git+https://github.com/cammacrae/tupledict.git```
 
