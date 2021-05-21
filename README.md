@@ -1,6 +1,6 @@
 # Tupledict
 
-[![test](https://github.com/cammacrae/tupledict/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/cammacrae/tupledict/actions/workflows/ci.yml)
+[![build](https://github.com/cammacrae/tupledict/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/cammacrae/tupledict/actions/workflows/ci.yml)
 
 ## Classes
 
