@@ -9,4 +9,5 @@ setup(
     author="Cam MacRae",
     author_email="cam.macrae@gmail.com",
     keywords=["tupledict", "tuple", "dictionary"],
+    license="Apache 2.0"
 )
