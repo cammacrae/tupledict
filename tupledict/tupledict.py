@@ -71,7 +71,7 @@ class TupleDict(dict):
             self._key_len = key_len
         elif self._key_len != key_len:
             raise KeyError(
-                f"Key length is {key_len} but this dict has key length {self._key_len}."
+                f"Key length is {key_len} but this TupleDict has key length {self._key_len}."
             )
 
     def _add_indx_key(self, key, value):
