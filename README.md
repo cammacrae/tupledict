@@ -106,6 +106,8 @@ KeyError: 'Key length is 1 but this dict has key length 2.'
 [1, 1.5, 2]
 >>> td2.select(["one", "two"], "third")
 []
+>>> td2.select("*", ["first", "third"])
+[1, 2]
 ```
 
 
