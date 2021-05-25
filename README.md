@@ -91,7 +91,7 @@ Values are set in the usual way:
 [1, 2, 3]
 ```
 
-Now using a tuple to set a composite key:
+Using a tuple to set a composite key makes ```select()``` a lot more powerful:
 ```python
 >>> td2 = TupleDict([(("one", "first"), 1), (("one", "second"), 1.5), (("two", "first"), 2)])
 >>> td2["one"]
