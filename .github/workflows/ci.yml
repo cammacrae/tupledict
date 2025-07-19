@@ -62,14 +62,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history so we can diff with base branch
       - name: Check for new release note file
         run: |
-          git fetch origin ${{ github.base_ref }}
-          NEW_FILES=$(git diff --name-status origin/${{ github.base_ref }}...HEAD | grep '^A' | awk '{print $2}' | grep '^releasenotes/notes/.*\.md$' || true)
+          git fetch origin ${{ github.base_ref }} --depth=1
+          BASE_REF="origin/${{ github.base_ref }}"
+          NEW_FILES=$(git diff --name-status $BASE_REF...HEAD | grep '^A' | awk '{print $2}' | grep '^releasenotes/notes/.*\.md$' || true)
           if [ -z "$NEW_FILES" ]; then
             echo "No new release note file found in releasenotes/notes/"
             exit 1
           fi
-
-
-
