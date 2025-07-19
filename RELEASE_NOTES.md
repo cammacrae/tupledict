@@ -2,6 +2,21 @@
 Release Notes
 =============
 
+.. _Release Notes_v0.0.3:
+
+v0.0.3
+======
+
+.. _Release Notes_v0.0.3_New Features:
+
+New Features
+------------
+
+.. releasenotes/notes/typing-update-e440f2f4cf30457e.yaml @ b'1d94759989fc930e32224531d72d73be5bbed436'
+
+- Added typing.
+
+
 .. _Release Notes_v0.0.2:
 
 v0.0.2
