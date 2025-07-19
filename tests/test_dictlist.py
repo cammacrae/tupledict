@@ -41,3 +41,15 @@ class TestDictList:
             ("two", 2.1),
             ("three", {"four": 4}),
         ]
+
+    def test_empty_dictlist(self) -> None:
+        dl: DictList = DictList([])
+        assert dl.values() == []
+        assert dl.items() == []
+
+    def test_missing_key_returns_empty_list(self, dictlist: DictList) -> None:
+        assert dictlist["not_a_key"] == []
+
+    def test_nested_dicts(self) -> None:
+        dl: DictList = DictList([{"a": {"b": {"c": 1}}}])
+        assert dl["a"] == [{"b": {"c": 1}}]
