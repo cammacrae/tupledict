@@ -15,6 +15,7 @@ python = "^3.9"
 pytest = "*"
 ipdb = "*"
 bumpversion = "*"
+reno = "*"
 
 [tool.bumpversion]
 current_version = "0.0.1"
