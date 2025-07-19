@@ -5,7 +5,6 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened, edited, ready_for_review, reopened]
 
 jobs:
   test:
@@ -53,6 +52,8 @@ jobs:
           source .venv/bin/activate
           pytest tests/
 
-
-
+      - name: Run mypy
+        run: |
+          source .venv/bin/activate
+          poetry run mypy src/ tests/
 
