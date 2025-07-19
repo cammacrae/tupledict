@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tupledict"
-version = "0.0.1"
+version = "0.0.2"
 description = "A dictionary indexed by tuples"
 authors = ["Cam MacRae <cam.macrae@gmail.com>"]
 license = "Apache 2.0"
@@ -18,7 +18,7 @@ bumpversion = "*"
 reno = "*"
 
 [tool.bumpversion]
-current_version = "0.0.1"
+current_version = "0.0.2"
 commit = true
 tag = true
 
