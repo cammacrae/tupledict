@@ -79,7 +79,7 @@ jobs:
             );
             console.log('Files in PR:', files.map(f => `${f.status}: ${f.filename}`));
             const hasReleaseNote = files.some(f =>
-              f.status === 'added' && /^releasenotes\/notes\/.*\.md$/.test(f.filename)
+              f.status === 'added' && /^releasenotes\/notes\/.*\.ya?ml$/.test(f.filename)
             );
             if (!hasReleaseNote) {
               core.setFailed('No new release note file found in releasenotes/notes/');
