@@ -219,3 +219,27 @@ class TestTupleDict:
 
         td._add_indx_key(("two", "three"), 23)
         assert td._key_indx == {"one": {"two": 12, "three": 13}, "two": {"three": 23}}
+
+    def test_len_and_iteration(self) -> None:
+        td: TupleDict = TupleDict([("a", 1), ("b", 2)])
+        assert len(td) == 2
+        assert set(td) == {("a",), ("b",)}
+        assert set(td.values()) == {1, 2}
+
+    def test_delitem(self) -> None:
+        td: TupleDict = TupleDict([("a", 1)])
+        del td[("a",)]
+        assert len(td) == 0
+        assert td._key_indx == {}
+
+    def test_invalid_key_type(self) -> None:
+        td: TupleDict = TupleDict()
+        with pytest.raises(TypeError):
+            td[{1, 2}] = 3  # set is unhashable
+
+    def test_equality(self) -> None:
+        td1: TupleDict = TupleDict([("a", 1)])
+        td2: TupleDict = TupleDict([("a", 1)])
+        assert td1 == td2
+        td2["b"] = 2
+        assert td1 != td2

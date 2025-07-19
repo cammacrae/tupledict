@@ -63,6 +63,23 @@ class TupleDict(dict[Tuple[K, ...], V], Generic[K, V]):
         key = self._valid_key(key)
         return super().__getitem__(key)
 
+    def __delitem__(self, key: Union[K, Tuple[K, ...]]) -> None:
+        key_tuple = self._valid_key(key)
+        super().__delitem__(key_tuple)
+        # Remove from _key_indx
+        tmp = self._key_indx
+        parents = []
+        for k in key_tuple[:-1]:
+            parents.append((tmp, k))
+            tmp = tmp[k]
+        del tmp[key_tuple[-1]]
+        # Clean up empty dicts
+        for parent, k in reversed(parents):
+            if not parent[k]:
+                del parent[k]
+            else:
+                break
+
     def select(self, *keys: Any) -> Any:
         key = tuple(keys)
         key = self._valid_key(key)
