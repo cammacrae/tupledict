@@ -3,6 +3,10 @@ name = "tupledict"
 version = "0.0.1"
 description = "A dictionary indexed by tuples"
 authors = ["Cam MacRae <cam.macrae@gmail.com>"]
+license = "Apache 2.0"
+keywords = ["tupledict", "tuple", "dictionary"]
+repository = "https://github.com/cammacrae/tupledict"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -10,7 +14,15 @@ python = "^3.9"
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
 ipdb = "*"
+bumpversion = "*"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.bumpversion]
+current_version = "0.0.1"
+commit = true
+tag = true
+
+[tool.bumpversion.files]
+"pyproject.toml" = {}
+
+
+
