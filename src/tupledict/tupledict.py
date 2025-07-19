@@ -39,13 +39,20 @@ class TupleDict(dict[Tuple[K, ...], V], Generic[K, V]):
                 raise TypeError(f"Expected at most 1 arguments, got {len(args)}")
             arg = args[0]
             if isinstance(arg, dict):
-                self.update({self._valid_key(k): v for k, v in arg.items()})
+                for k, v in arg.items():
+                    key = self._valid_key(k)
+                    super().__setitem__(key, v)
+                    self._add_indx_key(key, v)
             elif isinstance(arg, IterableABC):
-                self.update(((self._valid_key(k), v) for k, v in arg))
+                for k, v in arg:
+                    key = self._valid_key(k)
+                    super().__setitem__(key, v)
+                    self._add_indx_key(key, v)
         if kwargs:
-            self.update({self._valid_key(cast(K, k)): v for k, v in kwargs.items()})
-        for k, v in self.items():
-            self._add_indx_key(k, v)
+            for k, v in kwargs.items():
+                key = self._valid_key(cast(K, k))
+                super().__setitem__(key, v)
+                self._add_indx_key(key, v)
 
     def __setitem__(self, key: Union[K, Tuple[K, ...]], value: V) -> None:
         key = self._valid_key(key)
