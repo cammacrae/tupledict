@@ -7,6 +7,7 @@ license = "Apache 2.0"
 keywords = ["tupledict", "tuple", "dictionary"]
 repository = "https://github.com/cammacrae/tupledict"
 readme = "README.md"
+packages = [{ include = "tupledict", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
