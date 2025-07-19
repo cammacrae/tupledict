@@ -57,3 +57,19 @@ jobs:
           source .venv/bin/activate
           poetry run mypy src/ tests/
 
+  check-release-note:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for new release note file
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          NEW_FILES=$(git diff --name-status origin/${{ github.base_ref }}...HEAD | grep '^A' | awk '{print $2}' | grep '^docs/release-notes/.*\.md$' || true)
+          if [ -z "$NEW_FILES" ]; then
+            echo "No new release note file found in docs/release-notes/"
+            exit 1
+          fi
+
+
+
