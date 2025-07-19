@@ -1,10 +1,15 @@
-import pytest
+from typing import Any, List, Tuple
 from unittest import mock
+
+import pytest
+
 from tupledict import TupleDict
 
 
 class TestTupleDict:
-    def test__init__(self):
+    def test__init__(self) -> None:
+        td: TupleDict
+
         # no args
         td = TupleDict()
         assert td._key_len is None
@@ -75,8 +80,8 @@ class TestTupleDict:
                 any_order=True,
             )
 
-    def test__setitem__(self):
-        td = TupleDict()
+    def test__setitem__(self) -> None:
+        td: TupleDict = TupleDict()
         td["one"] = 1
         assert td._key_len == 1
         assert td._key_indx == {"one": 1}
@@ -107,61 +112,71 @@ class TestTupleDict:
         assert td._key_indx == {"one": 2}
         assert td == {("one",): 2}
 
-    def test__getitem__(self):
-        td = TupleDict()
-        with pytest.raises(KeyError):
-            td["one"]
+    @pytest.mark.parametrize(
+        "init, key, expected, raises",
+        [
+            ([], "one", None, True),
+            ([("one", 1), ("two", 2)], "one", 1, False),
+            ([("one", 1), ("two", 2)], ("one",), 1, False),
+            ([("one", 1), ("two", 2)], "two", 2, False),
+            ([("one", 1), ("two", 2)], ("two",), 2, False),
+            ([("one", 1), ("two", 2)], "three", None, True),
+            ([("one", 1), ("two", 2)], ("three", "four"), None, True),
+        ],
+    )
+    def test__getitem__(
+        self, init: List[Tuple[Any, Any]], key: Any, expected: Any, raises: bool
+    ) -> None:
+        td: TupleDict = TupleDict(init)
+        if raises:
+            with pytest.raises(KeyError):
+                td[key]
+        else:
+            assert td[key] == expected
 
-        td = TupleDict([("one", 1), ("two", 2)])
-        assert td["one"] == 1
-        assert td[("one",)] == 1
-        assert td["two"] == 2
-        assert td[("two",)] == 2
+    @pytest.mark.parametrize(
+        "init, select_args, expected, raises",
+        [
+            ([], ("one",), None, True),
+            ([("one", 1), ("two", 2)], ("one",), 1, False),
+            ([("one", 1), ("two", 2)], ("two",), 2, False),
+            ([("one", 1), ("two", 2)], ("*",), [1, 2], False),
+            (
+                [(("one", "two"), 12), (("one", "three"), 13), (("two", "three"), 23)],
+                ("one",),
+                None,
+                True,
+            ),
+            (
+                [(("one", "two"), 12), (("one", "three"), 13), (("two", "three"), 23)],
+                ("one", "two"),
+                12,
+                False,
+            ),
+            (
+                [(("one", "two"), 12), (("one", "three"), 13), (("two", "three"), 23)],
+                ("*", "three"),
+                [13, 23],
+                False,
+            ),
+        ],
+    )
+    def test_select(
+        self,
+        init: List[Tuple[Any, Any]],
+        select_args: Tuple[Any, ...],
+        expected: Any,
+        raises: bool,
+    ) -> None:
+        td: TupleDict = TupleDict(init)
+        if raises:
+            with pytest.raises(KeyError):
+                td.select(*select_args)
+        else:
+            assert td.select(*select_args) == expected
 
-        with pytest.raises(KeyError):
-            td["three"]
-
-        with pytest.raises(KeyError, match=(".* 2 .* 1.")):
-            td[("three", "four")]
-
-        with mock.patch.object(
-            td, "_valid_key", return_value=("one",)
-        ) as mock_valid_key:
-            assert td["one"] == 1
-            mock_valid_key.assert_called_once_with("one")
-
-    def test_select(self):
-        td = TupleDict()
-        with pytest.raises(KeyError, match=("('one',)")):
-            td.select("one")
-
-        td = TupleDict({"one": 1, "two": 2})
-        assert td.select("one") == 1
-        assert td.select("two") == 2
-        assert td.select("*") == [1, 2]
-
-        td = TupleDict(
-            [(("one", "two"), 12), (("one", "three"), 13), (("two", "three"), 23)]
-        )
-
-        with pytest.raises(KeyError, match=(".* 1 .* 2.")):
-            td.select("one")
-        assert td.select("one", "two") == 12
-        assert td.select("one", "three") == 13
-        assert td.select("two", "three") == 23
-        assert td.select("*", "three") == [13, 23]
-        assert td.select("*", "*") == [12, 13, 23]
-        assert td.select("one", "*") == [12, 13]
-        assert td.select(["one", "two"], "three") == [13, 23]
-        assert td.select(["one", "two"], ["two", "three"]) == [12, 13, 23]
-        assert td.select(["one", "two"], "*") == [12, 13, 23]
-        assert td.select("*", ["two", "three"]) == [12, 13, 23]
-        assert td.select(["two", "three", "four"], "three") == [23]
-        assert td.select("*", ["two", "three", "four"]) == [12, 13, 23]
-        assert td.select(["two", "three", "four"], "two") == []
-
-    def test_valid_key(self):
-        td = TupleDict()
+    def test_valid_key(self) -> None:
+        td: TupleDict = TupleDict()
         assert td._valid_key("one") == ("one",)
         assert td._valid_key(("two",)) == ("two",)
         assert td._key_len == 1
@@ -175,8 +190,8 @@ class TestTupleDict:
             td._valid_key(("four", "five"))
             mock_chk_key_len.assert_called_once_with(2)
 
-    def test_check_key_len(self):
-        td = TupleDict()
+    def test_check_key_len(self) -> None:
+        td: TupleDict = TupleDict()
         assert td._key_len is None
         td._check_key_len(5)
         assert td._key_len == 5
@@ -190,8 +205,8 @@ class TestTupleDict:
         with pytest.raises(KeyError, match=(".* 5 .* 1.")):
             td._check_key_len(5)
 
-    def test_add_indx_key(self):
-        td = TupleDict()
+    def test_add_indx_key(self) -> None:
+        td: TupleDict = TupleDict()
         td._add_indx_key(("one",), 1)
         assert td._key_indx == {"one": 1}
 
