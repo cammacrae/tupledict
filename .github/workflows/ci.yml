@@ -61,15 +61,25 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/github-script@v7
         with:
-          fetch-depth: 0  # Fetch all history so we can diff with base branch
-      - name: Check for new release note file
-        run: |
-          git fetch origin ${{ github.base_ref }} --depth=1
-          BASE_REF="FETCH_HEAD"
-          NEW_FILES=$(git diff --name-status $BASE_REF...${{ github.sha }} | grep '^A' | awk '{print $2}' | grep '^releasenotes/notes/.*\.md$' || true)
-          if [ -z "$NEW_FILES" ]; then
-            echo "No new release note file found in releasenotes/notes/"
-            exit 1
-          fi
+          script: |
+            const pr = context.payload.pull_request;
+            if (!pr) {
+              core.setFailed('Not a pull request event.');
+              return;
+            }
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+              }
+            );
+            const hasReleaseNote = files.some(f =>
+              f.status === 'added' && /^releasenotes\/notes\/.*\.md$/.test(f.filename)
+            );
+            if (!hasReleaseNote) {
+              core.setFailed('No new release note file found in releasenotes/notes/');
+            }
