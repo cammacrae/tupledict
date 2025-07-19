@@ -65,9 +65,9 @@ jobs:
       - name: Check for new release note file
         run: |
           git fetch origin ${{ github.base_ref }}
-          NEW_FILES=$(git diff --name-status origin/${{ github.base_ref }}...HEAD | grep '^A' | awk '{print $2}' | grep '^release-notes/notes/.*\.md$' || true)
+          NEW_FILES=$(git diff --name-status origin/${{ github.base_ref }}...HEAD | grep '^A' | awk '{print $2}' | grep '^releasenotes/notes/.*\.md$' || true)
           if [ -z "$NEW_FILES" ]; then
-            echo "No new release note file found in release-notes/notes/"
+            echo "No new release note file found in releasenotes/notes/"
             exit 1
           fi
 
