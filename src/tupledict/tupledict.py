@@ -9,6 +9,7 @@ from typing import (
     Tuple,
     TypeVar,
     Union,
+    cast,
 )
 
 from .dictlist import DictList
@@ -42,7 +43,7 @@ class TupleDict(dict[Tuple[K, ...], V], Generic[K, V]):
             elif isinstance(arg, IterableABC):
                 self.update(((self._valid_key(k), v) for k, v in arg))
         if kwargs:
-            self.update({self._valid_key(k): v for k, v in kwargs.items()})
+            self.update({self._valid_key(cast(K, k)): v for k, v in kwargs.items()})
         for k, v in self.items():
             self._add_indx_key(k, v)
 
