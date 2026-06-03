@@ -10,7 +10,7 @@ readme = "README.md"
 packages = [{ include = "tupledict", from = "src" }]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
